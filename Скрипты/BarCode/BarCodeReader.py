@@ -39,9 +39,9 @@ tickTimer = 0.5 # Таймер сна, для более медленного в
 def BarCodeGenerate(number = "0000000000000",name = "Default"):
     my_code = EAN13(number, writer=ImageWriter())
     my_code.save(name)
-    print(cl.Fore.BLACK + "Для номера " + str(number) + " сохранён код под названием: "+ str(name))
+    print(cl.Fore.BLACK + f"Для номера {number} сохранён код под названием: {name}")
     acsees_list.append(number)
-    print(cl.Fore.BLACK + "Список допущенных: " +str (acsees_list))
+    print(cl.Fore.BLACK + f"Список допущенных: {acsees_list}")
 
 #Чтение штрих-кода
 def BarcodeReader():
@@ -50,7 +50,7 @@ def BarcodeReader():
         cap = cv.VideoCapture(0)  # Подключаемся (захватываем) к камере. 0 — это индекс камеры, если их несколько то будет 0 или 1 и т.д.
         ret, img = cap.read()  # Читаем с устройства кадр, метод возвращает флаг ret (True , False) и img — саму картинку (массив numpy)
         #cv.imshow("Camera view", img)
-        cv.imwrite("Screen.jpg", img)
+        cv.imwrite("Screen.jpg", img) #Сохраняем изображение
         barcode = cv.imread("Screen.jpg") #Читаем изображение
         detectedBarcodes = decode(barcode)  # Распознаём штрих-код
 
@@ -80,8 +80,8 @@ def BarcodeReader():
             if barcode.data != "":
                 # Выведем код и его тип
                 data = int(barcode.data)
-                print(cl.Fore.BLACK + "Данные на штрих-коде: : " + str(data))
-                print(cl.Fore.BLACK + "Тип штрих-кода : " + str(barcode.type))
+                print(cl.Fore.BLACK + f"Данные на штрих-коде: {data}")
+                print(cl.Fore.BLACK + f"Тип штрих-кода: {barcode.type}")
 
                 if ArduinoControl:
                     SendData(1)  # Отправим на Ардуино сигнал об этом
@@ -95,10 +95,10 @@ def BarcodeReader():
 
 def SendData(x):
     ser.write(bytes(x, 'utf-8'))
-    print(cl.Fore.BLACK + "Bytes: " + str(bytes(x, 'utf-8')))
+    print(cl.Fore.BLACK + f"Bytes: {bytes(x, 'utf-8')}")
     time.sleep(0.05)
     data = ser.readline()
-    print(cl.Fore.BLACK + "Data: " + str(data))
+    print(cl.Fore.BLACK + f"Data: {data}")
 
 if __name__ == "__main__":
     if ArduinoControl:
